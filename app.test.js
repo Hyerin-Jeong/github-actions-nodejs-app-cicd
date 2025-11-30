@@ -1,16 +1,14 @@
-const http = require('http');
+// app.test.js
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-
 const expect = chai.expect;
-
-const server = require('./app');
+const app = require('./app');
 
 chai.use(chaiHttp);
 
 describe('HTTP Server', () => {
   it('should return "Hello, World!" when GET /', (done) => {
-    chai.request(server)
+    chai.request(app)
       .get('/')
       .end((err, res) => {
         expect(res).to.have.status(200);
