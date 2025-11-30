@@ -10,12 +10,24 @@ jobs:
     strategy:
       matrix:
         node-version: [22.x]
+
     steps:
-    - uses: actions/checkout@v4.2.2
+    - name: Checkout repository
+      uses: actions/checkout@v4.2.2
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4.1.0
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-    - run: npm test
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run tests
+      run: npm test
+
+    - name: Restart PM2 service (Deploy)
+      run: |
+        pm2 restart github-deploy || pm2 start app.js --name "github-deploy" --watch
+
